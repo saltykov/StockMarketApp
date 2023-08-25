@@ -1,6 +1,6 @@
 package com.example.stockmarketapp.domain.model
 
-data class CompanyListingModel(
+data class CompanyListing(
     val symbol: String,
     val name: String,
     val exchange: String
