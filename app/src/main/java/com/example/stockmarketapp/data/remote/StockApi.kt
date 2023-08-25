@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
         @GET("query?function=LISTING_STATUS")
         suspend fun getCompaniesList(
-            @Query("apikey") apiKey: String
+            @Query("apikey") apiKey: String = API_KEY
         ) : ResponseBody
 
         companion object {
