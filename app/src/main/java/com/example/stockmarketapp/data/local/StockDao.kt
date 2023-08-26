@@ -1,28 +1,27 @@
 package com.example.stockmarketapp.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.stockmarketapp.data.local.dbmodel.CompanyListingDbModel
+import com.example.stockmarketapp.data.local.dbmodel.CompanyDbModel
 
 @Dao
 interface StockDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCompanyListings(
-        companyListingDbModel: List<CompanyListingDbModel>
+        companyDbModel: List<CompanyDbModel>
     )
 
-    @Query("DELETE FROM companylistingtable")
+    @Query("DELETE FROM companylistingstable")
     suspend fun clearCompanyListing()
 
     @Query("""
         SELECT * 
-        FROM companylistingtable
+        FROM companylistingstable
         WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%' OR 
             UPPER(:query) == symbol
     """)
-    suspend fun searchCompanyListing(query: String): List<CompanyListingDbModel>
+    suspend fun searchCompanies(query: String): List<CompanyDbModel>
 }

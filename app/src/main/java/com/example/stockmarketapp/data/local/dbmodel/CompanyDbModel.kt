@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class CompanyListingDbModel(
+data class CompanyDbModel(
     @PrimaryKey val id: Int? = null,
     val symbol: String,
     val name: String,

@@ -1,18 +1,18 @@
 package com.example.stockmarketapp.data.remote.mapper
 
-import com.example.stockmarketapp.data.local.dbmodel.CompanyListingDbModel
-import com.example.stockmarketapp.domain.model.CompanyListing
+import com.example.stockmarketapp.data.local.dbmodel.CompanyDbModel
+import com.example.stockmarketapp.domain.model.Company
 
-fun CompanyListingDbModel.toCompanyListing(): CompanyListing{
-    return CompanyListing(
+fun CompanyDbModel.toCompany(): Company{
+    return Company(
         symbol = this.symbol,
         name = this.name,
         exchange = this.exchange
     )
 }
 
-fun CompanyListing.toCompanyListingDbModel(): CompanyListingDbModel{
-    return CompanyListingDbModel(
+fun Company.toCompanyDbModel(): CompanyDbModel{
+    return CompanyDbModel(
         symbol = this.symbol,
         name = this.name,
         exchange = this.exchange

@@ -1,12 +1,11 @@
 package com.example.stockmarketapp.data.repository
 
 import com.example.stockmarketapp.data.csv.CSVParser
-import com.example.stockmarketapp.data.csv.CompanyListingsParser
 import com.example.stockmarketapp.data.local.StockDatabase
 import com.example.stockmarketapp.data.remote.StockApi
-import com.example.stockmarketapp.data.remote.mapper.toCompanyListing
-import com.example.stockmarketapp.data.remote.mapper.toCompanyListingDbModel
-import com.example.stockmarketapp.domain.model.CompanyListing
+import com.example.stockmarketapp.data.remote.mapper.toCompany
+import com.example.stockmarketapp.data.remote.mapper.toCompanyDbModel
+import com.example.stockmarketapp.domain.model.Company
 import com.example.stockmarketapp.domain.repository.StockRepository
 import com.example.stockmarketapp.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -20,20 +19,20 @@ import javax.inject.Singleton
 class StockRepositoryImpl @Inject constructor(
     val api: StockApi,
     val db: StockDatabase,
-    val companyListingsParser: CSVParser<CompanyListing>
+    val companyListingsParser: CSVParser<Company>
 ) : StockRepository {
 
     private val dao = db.dao
-    override suspend fun getCompanyListings(
+    override suspend fun getCompanies(
         fetchFromRemote: Boolean,
         query: String
-    ): Flow<Resource<List<CompanyListing>>> {
+    ): Flow<Resource<List<Company>>> {
         return flow {
             emit(Resource.Loading(true))
-            val localListings = dao.searchCompanyListing(query)
+            val localListings = dao.searchCompanies(query)
             emit(Resource.Success(
                 data = localListings.map {
-                    it.toCompanyListing()
+                    it.toCompany()
                 }
             ))
             val isDbEmpty = localListings.isEmpty() && query.isBlank()
@@ -43,7 +42,7 @@ class StockRepositoryImpl @Inject constructor(
                 return@flow
             }
             val remoteListings = try {
-                val response = api.getCompaniesList()
+                val response = api.getCompanies()
                 companyListingsParser.parse(response.byteStream())
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -57,10 +56,10 @@ class StockRepositoryImpl @Inject constructor(
             remoteListings?.let {companyListing ->
                 dao.clearCompanyListing()
                 dao.insertCompanyListings(companyListing.map {
-                    it.toCompanyListingDbModel()
+                    it.toCompanyDbModel()
                 })
-                emit(Resource.Success(data = dao.searchCompanyListing("")
-                    .map { it.toCompanyListing()
+                emit(Resource.Success(data = dao.searchCompanies("")
+                    .map { it.toCompany()
                 }))
                 emit(Resource.Loading(false))
 
