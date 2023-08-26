@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +23,8 @@ import com.example.stockmarketapp.domain.model.Company
 @Composable
 fun CompanyItem(company: Company, modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     )
     {
         Column(
@@ -60,7 +61,7 @@ fun CompanyItem(company: Company, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CompanyItemPreview() {
     CompanyItem(company = Company("TSLA", "Tesla", "BTC"))
