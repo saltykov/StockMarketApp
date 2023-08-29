@@ -6,6 +6,7 @@ import com.example.stockmarketapp.data.remote.StockApi
 import com.example.stockmarketapp.data.remote.dto.DailyInfoDto
 import com.example.stockmarketapp.data.remote.mapper.toCompany
 import com.example.stockmarketapp.data.remote.mapper.toCompanyDbModel
+import com.example.stockmarketapp.data.remote.mapper.toCompanyInfo
 import com.example.stockmarketapp.data.remote.mapper.toDailyInfo
 import com.example.stockmarketapp.domain.model.Company
 import com.example.stockmarketapp.domain.model.CompanyInfo
@@ -29,7 +30,7 @@ class StockRepositoryImpl @Inject constructor(
     private val dailyInfoParser: CSVParser<DailyInfoDto>
 ) : StockRepository {
 
-    private val dao = db.dao
+    private val dao = db.dao //DI
     override suspend fun getCompanies(
         fetchFromRemote: Boolean,
         query: String
@@ -83,21 +84,31 @@ class StockRepositoryImpl @Inject constructor(
             val dailyInfoDto = dailyInfoParser.parse(response.byteStream())
             val dailyInfo = dailyInfoDto.map { it.toDailyInfo() }.filterLast30Days()
 
-            return Resource.Success(dailyInfo)
+            Resource.Success(dailyInfo)
 
         } catch (e: IOException) {
             e.printStackTrace()
-            return Resource.Error("IOException: ${e.message}")
+            Resource.Error("IOException: ${e.message}")
         } catch (e: HttpException) {
             e.printStackTrace()
-            return Resource.Error(e.message())
+            Resource.Error("IOException: ${e.message}")
         }
     }
 
     override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
-        TODO("Not yet implemented")
+        return try {
+            val response = api.getCompanyInfo(symbol)
+            Resource.Success(
+                response.toCompanyInfo()
+            )
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Resource.Error("IOException: ${e.message}")
+        } catch (e: HttpException){
+            e.printStackTrace()
+            Resource.Error("HttpException: ${e.message}")
+        }
     }
-
 
 
 }
