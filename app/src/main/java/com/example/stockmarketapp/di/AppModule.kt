@@ -2,6 +2,7 @@ package com.example.stockmarketapp.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.stockmarketapp.data.local.StockDao
 import com.example.stockmarketapp.data.local.StockDatabase
 import com.example.stockmarketapp.data.remote.StockApi
 import dagger.Module
@@ -29,11 +30,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesDatabase(app: Application): StockDatabase {
+    fun providesStockDatabase(app: Application): StockDatabase {
         return Room.databaseBuilder(
             app,
             StockDatabase::class.java,
             "stockmarket"
         ).build()
+    }
+
+    @Provides
+    fun providesStockDao(database: StockDatabase) : StockDao{
+        return database.dao
     }
 }
