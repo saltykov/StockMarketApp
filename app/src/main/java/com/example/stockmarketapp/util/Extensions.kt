@@ -10,5 +10,5 @@ fun List<DailyInfo>.filterLast30Days(): List<DailyInfo> {
     val startDate = calendar.time
     return this.filter {
         it.date >= startDate
-    }
+    }.reversed()
 }
