@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,9 +41,10 @@ fun StockChart(
         (dailyInfo).minOfOrNull { it.close }?.toInt() ?: 0
     }
     val density = LocalDensity.current
+    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
     val textPaint = remember(density) {
         Paint().apply {
-            color = android.graphics.Color.WHITE
+            color = onBackgroundColor.toArgb()
             textAlign = Paint.Align.CENTER
             textSize = density.run { 12.sp.toPx() }
         }

@@ -20,7 +20,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStockApi(): StockApi{
+    fun provideStockApi(): StockApi {
         return Retrofit.Builder()
             .baseUrl(StockApi.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
@@ -39,7 +39,8 @@ object AppModule {
     }
 
     @Provides
-    fun providesStockDao(database: StockDatabase) : StockDao{
+    fun providesStockDao(database: StockDatabase): StockDao {
         return database.dao
     }
+
 }

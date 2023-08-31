@@ -61,6 +61,10 @@ class StockRepositoryImpl @Inject constructor(
                 e.printStackTrace()
                 emit(Resource.Error("Couldn't load data"))
                 null
+            } catch (e: Exception){
+                e.printStackTrace()
+                emit(Resource.Error("Couldn't load data"))
+                null
             }
             remoteListings?.let { companyListing ->
                 dao.clearCompanyListing()
@@ -92,22 +96,20 @@ class StockRepositoryImpl @Inject constructor(
             Resource.Error("IOException: ${e.message}")
         } catch (e: HttpException) {
             e.printStackTrace()
-            Resource.Error("IOException: ${e.message}")
+            Resource.Error("HttpException: ${e.message}")
         }
     }
 
     override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
         return try {
             val response = api.getCompanyInfo(symbol)
-            Log.d("CompanyInfo", response.toCompanyInfo().toString())
-            Log.d("CompanyInfo", symbol.toString())
             Resource.Success(
                 response.toCompanyInfo()
             )
         } catch (e: IOException) {
             e.printStackTrace()
             Resource.Error("IOException: ${e.message}")
-        } catch (e: HttpException){
+        } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Error("HttpException: ${e.message}")
         }
