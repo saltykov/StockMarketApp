@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stockmarketapp.domain.repository.StockRepository
+import com.example.stockmarketapp.domain.usecases.GetCompaniesUseCase
 import com.example.stockmarketapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CompanyListingViewModel @Inject constructor(
-    private val repository: StockRepository
+    private val getCompaniesUseCase: GetCompaniesUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(CompanyListingState())
@@ -46,8 +46,7 @@ class CompanyListingViewModel @Inject constructor(
         fetchFromRemote: Boolean = false
     ) {
         viewModelScope.launch {
-            repository
-                .getCompanies(fetchFromRemote, query)
+            getCompaniesUseCase(fetchFromRemote, query)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -57,7 +56,7 @@ class CompanyListingViewModel @Inject constructor(
                         }
 
                         is Resource.Error -> {
-                            Unit
+                            Unit //todo handle errors
                         }
 
                         is Resource.Loading -> {
