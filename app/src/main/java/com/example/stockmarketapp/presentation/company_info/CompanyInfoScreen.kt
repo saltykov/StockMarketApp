@@ -100,6 +100,10 @@ fun CompanyInfoScreen(
                 )
                 if (state.dailyInfo.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
+                    Divider(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(text = "Market Summary")
                     Spacer(modifier = Modifier.height(32.dp))
                     StockChart(
